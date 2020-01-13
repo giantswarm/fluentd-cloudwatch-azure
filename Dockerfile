@@ -7,6 +7,7 @@ RUN buildDeps="make gcc g++ libc-dev zlib1g-dev ruby-dev git" \
  && gem install fluent-plugin-array-spin \
  && gem install fluent-plugin-rewrite-tag-filter \
  && gem install fluent-plugin-azurestorage \
+ && gem install fluent-plugin-azure-loganalytics \
  && gem sources --clear-all \
  && SUDO_FORCE_REMOVE=yes \
     apt-get purge -y --auto-remove \
