@@ -10,5 +10,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - CircleCI: removed deploy and build outdated jobs.
+- CircleCI: upgrade orb 0.4.5 to 4.8.1
 
 [Unreleased]: https://github.com/giantswarm/REPOSITORY_NAME/tree/master
