@@ -10,5 +10,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Upgrade base image fluentd-kubernetes-daemonset v1.9.3-debian-cloudwatch-1.0 to v1.14-debian-cloudwatch-1
+- CircleCI: removed deploy and build outdated jobs.
+- CircleCI: upgrade orb 0.4.5 to 4.8.1
+- CircleCI: push to docker.io
 
 [Unreleased]: https://github.com/giantswarm/REPOSITORY_NAME/tree/master
