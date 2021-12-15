@@ -7,4 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Upgrade base image fluentd-kubernetes-daemonset v1.9.3-debian-cloudwatch-1.0 to v1.14-debian-cloudwatch-1
+
 [Unreleased]: https://github.com/giantswarm/REPOSITORY_NAME/tree/master
