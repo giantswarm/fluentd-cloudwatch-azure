@@ -1,40 +1,50 @@
-orbs:
-  architect: giantswarm/architect@0.4.5
-
 version: 2.1
+
+orbs:
+  architect: giantswarm/architect@4.8.1
 
 workflows:
   build:
     jobs:
-      - architect/push-to-docker-legacy:
-          name: push-fluentd-cloudwatch-azure-to-quay
+      - architect/push-to-docker:
+          name: push-to-docker
+          context: "architect"
+          image: "docker.io/giantswarm/fluentd-cloudwatch-azure"
+          username_envar: "DOCKER_USERNAME"
+          password_envar: "DOCKER_PASSWORD"
+
+      - architect/push-to-docker:
+          name: push-to-quay
+          context: "architect"
           image: "quay.io/giantswarm/fluentd-cloudwatch-azure"
           username_envar: "QUAY_USERNAME"
           password_envar: "QUAY_PASSWORD"
 
-      - hold-push-fluentd-cloudwatch-azure-to-aliyun-pr:
+      - aliyun-approval:
           type: approval
           # Needed to prevent job from being triggered on master branch.
           filters:
             branches:
               ignore: master
 
-      - architect/push-to-docker-legacy:
-          name: push-fluentd-cloudwatch-azure-to-aliyun-pr
+      - architect/push-to-docker:
+          name: push-to-aliyun-pr
+          context: "architect"
           image: "registry-intl.cn-shanghai.aliyuncs.com/giantswarm/fluentd-cloudwatch-azure"
           username_envar: "ALIYUN_USERNAME"
           password_envar: "ALIYUN_PASSWORD"
           # Push to Aliyun should execute for non-master branches only once manually approved.
           requires:
-            - hold-push-fluentd-cloudwatch-azure-to-aliyun-pr
+            - aliyun-approval
           # Needed to prevent job being triggered for master branch.
           filters:
             branches:
               ignore: master
 
       # Push to Aliyun should execute without manual approval on master.
-      - architect/push-to-docker-legacy:
-          name: push-fluentd-cloudwatch-azure-to-aliyun-master
+      - architect/push-to-docker:
+          name: push-to-aliyun-master
+          context: "architect"
           image: "registry-intl.cn-shanghai.aliyuncs.com/giantswarm/fluentd-cloudwatch-azure"
           username_envar: "ALIYUN_USERNAME"
           password_envar: "ALIYUN_PASSWORD"
