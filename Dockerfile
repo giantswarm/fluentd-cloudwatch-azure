@@ -1,4 +1,4 @@
-FROM quay.io/giantswarm/fluentd-kubernetes-daemonset:v1.9.3-debian-cloudwatch-1.0
+FROM quay.io/giantswarm/fluentd-kubernetes-daemonset:v1.14-debian-cloudwatch-1
 
 # Use root account to use apt
 USER root
