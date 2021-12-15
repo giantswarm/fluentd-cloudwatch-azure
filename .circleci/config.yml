@@ -39,16 +39,6 @@ jobs:
         - ./fluentd-cloudwatch-azure
         - ./architect
 
-  deploy:
-    machine: true
-    steps:
-    - checkout
-    - attach_workspace:
-        at: .
-    - deploy:
-        command: |
-            ./architect deploy
-
 workflows:
   build:
     jobs:
@@ -92,14 +82,6 @@ workflows:
           requires:
             - build
           # Needed to trigger job only on merge to master.
-          filters:
-            branches:
-              only: master
-      - deploy:
-          name: deploy
-          requires:
-            - push-fluentd-cloudwatch-azure-to-aliyun-master
-            - push-fluentd-cloudwatch-azure-to-quay 
           filters:
             branches:
               only: master
