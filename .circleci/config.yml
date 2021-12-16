@@ -12,6 +12,9 @@ workflows:
           image: "docker.io/giantswarm/fluentd-cloudwatch-azure"
           username_envar: "DOCKER_USERNAME"
           password_envar: "DOCKER_PASSWORD"
+          filters:
+            tags:
+              only: /^v.*/
 
       - architect/push-to-docker:
           name: push-to-quay
@@ -19,13 +22,28 @@ workflows:
           image: "quay.io/giantswarm/fluentd-cloudwatch-azure"
           username_envar: "QUAY_USERNAME"
           password_envar: "QUAY_PASSWORD"
+          filters:
+            tags:
+              only: /^v.*/
 
-      - aliyun-approval:
-          type: approval
-          # Needed to prevent job from being triggered on master branch.
+      - architect/push-to-docker:
+          name: push-to-aliyun-master
+          context: "architect"
+          image: "registry-intl.cn-shanghai.aliyuncs.com/giantswarm/fluentd-cloudwatch-azure"
+          username_envar: "ALIYUN_USERNAME"
+          password_envar: "ALIYUN_PASSWORD"
           filters:
             branches:
-              ignore: master
+              ignore: /.*/
+            tags:
+              only: /^v.*/
+
+      # Push to Aliyun should execute for non-master branches only once manually approved.
+      - aliyun-approval:
+          type: approval
+          filters:
+            tags:
+              ignore: /^v.*/
 
       - architect/push-to-docker:
           name: push-to-aliyun-pr
@@ -33,22 +51,8 @@ workflows:
           image: "registry-intl.cn-shanghai.aliyuncs.com/giantswarm/fluentd-cloudwatch-azure"
           username_envar: "ALIYUN_USERNAME"
           password_envar: "ALIYUN_PASSWORD"
-          # Push to Aliyun should execute for non-master branches only once manually approved.
           requires:
             - aliyun-approval
-          # Needed to prevent job being triggered for master branch.
           filters:
-            branches:
-              ignore: master
-
-      # Push to Aliyun should execute without manual approval on master.
-      - architect/push-to-docker:
-          name: push-to-aliyun-master
-          context: "architect"
-          image: "registry-intl.cn-shanghai.aliyuncs.com/giantswarm/fluentd-cloudwatch-azure"
-          username_envar: "ALIYUN_USERNAME"
-          password_envar: "ALIYUN_PASSWORD"
-          # Needed to trigger job only on merge to master.
-          filters:
-            branches:
-              only: master
+            tags:
+              ignore: /^v.*/
