@@ -33,6 +33,8 @@ workflows:
           username_envar: "ALIYUN_USERNAME"
           password_envar: "ALIYUN_PASSWORD"
           filters:
+            branches:
+              ignore: /.*/
             tags:
               only: /^v.*/
 
@@ -40,8 +42,8 @@ workflows:
       - aliyun-approval:
           type: approval
           filters:
-            branches:
-              ignore: master
+            tags:
+              ignore: /^v.*/
 
       - architect/push-to-docker:
           name: push-to-aliyun-pr
@@ -52,5 +54,5 @@ workflows:
           requires:
             - aliyun-approval
           filters:
-            branches:
-              ignore: master
+            tags:
+              ignore: /^v.*/
